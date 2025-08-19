@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Home • Seung Hyun Jin</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+	<style>
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+		html { scroll-behavior: smooth; }
+		html, body { height: 100%; }
+		body {
+			font-family: 'JetBrains Mono', monospace;
+			background: #0d1117;
+			color: #c9d1d9;
+		}
+		.container { max-width: 1000px; margin: 0 auto; padding: 24px; }
+		.header {
+			position: sticky; top: 0; z-index: 50;
+			background: rgba(22, 27, 34, 0.85);
+			backdrop-filter: blur(6px);
+			border-bottom: 1px solid #30363d;
+		}
+		.nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 24px; }
+		.nav a { color: #c9d1d9; text-decoration: none; }
+		.nav a:hover { color: #58a6ff; }
+		.nav .brand { color: #58a6ff; font-weight: 600; }
+		.menu { display: flex; gap: 18px; }
+		.main { padding-top: 24px; }
+		.section { padding: 60px 24px; border-bottom: 1px solid #30363d; scroll-margin-top: 70px; }
+		.section h2 { color: #58a6ff; margin-bottom: 12px; font-size: 22px; }
+		.muted { color: #8b949e; }
+		.hero { padding: 48px 24px 24px; }
+		.hero h1 { font-size: 32px; color: #e6edf3; margin-bottom: 8px; }
+		.badge { display: inline-block; background: #161b22; border: 1px solid #30363d; color: #c9d1d9; padding: 6px 10px; border-radius: 6px; margin-right: 8px; margin-bottom: 8px; }
+		.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+		.card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; }
+		.card h3 { color: #e6edf3; margin-bottom: 6px; font-size: 18px; }
+		.card p { color: #8b949e; font-size: 14px; }
+		.btn { display: inline-block; margin-top: 10px; color: #79c0ff; text-decoration: none; border-bottom: 1px dotted #79c0ff; }
+		.btn:hover { color: #58a6ff; border-bottom-color: #58a6ff; }
+		.footer { padding: 24px; text-align: center; color: #8b949e; }
+	</style>
+</head>
+<body>
+	<header class="header">
+		<div class="container nav">
+			<div class="brand">seunghyun.dev</div>
+			<nav class="menu" aria-label="Primary">
+				<a href="#about">About</a>
+				<a href="#experience">Work Experience</a>
+				<a href="#projects">Projects</a>
+				<a href="#resume">Resume</a>
+			</nav>
+		</div>
+	</header>
+
+	<main class="main">
+		<section class="container hero" id="hero" aria-labelledby="hero-title">
+			<h1 id="hero-title">Seung Hyun Jin — SWE + AI Engineer</h1>
+			<p class="muted">Building reliable systems and ML-enabled products. Focused on pragmatic engineering and clean UX.</p>
+		</section>
+
+		<section class="container section" id="about" aria-labelledby="about-title">
+			<h2 id="about-title">About</h2>
+			<p class="muted">I'm a junior attending Duke University. Love to work with data, machine learning, and pushing products for others to use. I love to play basketball and gamble to get pokemon cards.</p>
+		</section>
+
+		<section class="container section" id="experience" aria-labelledby="exp-title">
+			<h2 id="exp-title">Work Experience</h2>
+			<div class="grid">
+				<div class="card">
+					<h3>Role @ Company</h3>
+					<p>YYYY–YYYY • City/Remote</p>
+					<p class="muted">One or two lines describing impact, tech stack, and outcomes.</p>
+				</div>
+				<div class="card">
+					<h3>Role @ Company</h3>
+					<p>YYYY–YYYY • City/Remote</p>
+					<p class="muted">One or two lines describing impact, tech stack, and outcomes.</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="container section" id="projects" aria-labelledby="projects-title">
+			<h2 id="projects-title">Projects</h2>
+			<div class="grid">
+				<div class="card">
+					<h3>Project Name</h3>
+					<p class="muted">Brief description of what it does and the tech used.</p>
+					<a class="btn" href="#" target="_blank" rel="noopener">View</a>
+				</div>
+				<div class="card">
+					<h3>Project Name</h3>
+					<p class="muted">Brief description of what it does and the tech used.</p>
+					<a class="btn" href="#" target="_blank" rel="noopener">View</a>
+				</div>
+				<div class="card">
+					<h3>Project Name</h3>
+					<p class="muted">Brief description of what it does and the tech used.</p>
+					<a class="btn" href="#" target="_blank" rel="noopener">View</a>
+				</div>
+			</div>
+		</section>
+
+		<section class="container section" id="resume" aria-labelledby="resume-title">
+			<h2 id="resume-title">Resume</h2>
+			<p class="muted">Add your resume PDF to <code>assets/resume.pdf</code>. Link below will start working once the file is there.</p>
+			<p style="margin-top:8px;"><a class="btn" href="../assets/resume.pdf" target="_blank" rel="noopener">Download Resume (PDF)</a></p>
+		</section>
+	</main>
+
+	<footer class="footer">
+		<div class="container">
+			<a class="btn" href="../intro.html">Replay intro</a>
+		</div>
+	</footer>
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seung Hyun Jin - SWE + AI Engineer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        .terminal {
+            background-color: #161b22;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            margin: 20px;
+            height: calc(100vh - 40px);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        .terminal-header {
+            background-color: #21262d;
+            padding: 12px 20px;
+            border-bottom: 1px solid #30363d;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .close { background-color: #ff5f56; }
+        .minimize { background-color: #ffbd2e; }
+        .maximize { background-color: #27c93f; }
+        
+        .terminal-title {
+            margin-left: 16px;
+            font-size: 14px;
+            color: #8b949e;
+        }
+        
+        .terminal-body {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .prompt {
+            color: #58a6ff;
+        }
+        
+        .user { color: #7c3aed; }
+        .host { color: #f85149; }
+        .path { color: #a5a5a5; }
+        .command { color: #79c0ff; }
+        .file { color: #ffa657; }
+        .folder { color: #58a6ff; }
+        .output { color: #c9d1d9; }
+        
+        .line {
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .cursor {
+            background-color: #c9d1d9;
+            width: 8px;
+            height: 16px;
+            margin-left: 4px;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .command-input {
+            background: transparent;
+            border: none;
+            color: #c9d1d9;
+            font-family: inherit;
+            font-size: inherit;
+            outline: none;
+            width: 200px;
+            margin-left: 4px;
+        }
+        
+        .help-commands {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #0d1117;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+        }
+        
+        .help-title {
+            color: #58a6ff;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .help-item {
+            margin-bottom: 8px;
+        }
+        
+        .help-cmd {
+            color: #79c0ff;
+            font-weight: 500;
+        }
+        
+        .help-desc {
+            color: #8b949e;
+            margin-left: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .terminal {
+                margin: 10px;
+                height: calc(100vh - 20px);
+                border-radius: 0;
+            }
+            
+            .terminal-body {
+                padding: 15px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <div class="terminal-button close"></div>
+                <div class="terminal-button minimize"></div>
+                <div class="terminal-button maximize"></div>
+            </div>
+            <div class="terminal-title">seunghyun@archlinux: ~</div>
+        </div>
+        
+        <div class="terminal-body" id="terminal-body">
+            <!-- Populated by script -->
+        </div>
+    </div>
+
+    <script>
+        const terminalBody = document.getElementById('terminal-body');
+        
+        const state = {
+            user: 'seunghyun',
+            host: 'archlinux',
+            path: '~'
+        };
+        
+        const REDIRECT_TARGET = 'home/index.html';
+        const TYPE_DELAY_MS = 70; // slightly slower typing
+        const SPINNER_FRAMES = ['|', '/', '-', '\\'];
+        const SPINNER_INTERVAL_MS = 120;
+        const SPINNER_DURATION_MS = 1800; // total spinner time
+        
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        function scrollToBottom() {
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+        
+        function clearCursorsExcept(line) {
+            const cursors = terminalBody.querySelectorAll('.cursor');
+            cursors.forEach(c => { if (!line || !line.contains(c)) c.remove(); });
+        }
+        
+        function createPromptLine() {
+            const line = document.createElement('div');
+            line.className = 'line';
+            line.innerHTML = `
+                <span class="prompt">
+                    <span class="user">${state.user}</span>@<span class="host">${state.host}</span>:<span class="path">${state.path}$</span>
+                </span>
+                <span class="typed"></span>
+                <div class="cursor"></div>
+            `;
+            terminalBody.appendChild(line);
+            clearCursorsExcept(line);
+            scrollToBottom();
+            return line;
+        }
+        
+        async function typeInto(element, text, delay = TYPE_DELAY_MS) {
+            for (const char of text) {
+                element.textContent += char;
+                scrollToBottom();
+                await sleep(delay);
+            }
+        }
+        
+        function printOutput(text) {
+            const line = document.createElement('div');
+            line.className = 'line';
+            line.innerHTML = `<span class="output">${text.replace(/\n/g, '<br>')}</span>`;
+            terminalBody.appendChild(line);
+            scrollToBottom();
+        }
+        
+        function startSpinner(message = 'Installing') {
+            const line = document.createElement('div');
+            line.className = 'line';
+            const output = document.createElement('span');
+            output.className = 'output';
+            const spinner = document.createElement('span');
+            spinner.className = 'spinner';
+            spinner.textContent = SPINNER_FRAMES[0];
+            output.textContent = `${message} `;
+            output.appendChild(spinner);
+            line.appendChild(output);
+            terminalBody.appendChild(line);
+            scrollToBottom();
+            let i = 0;
+            const interval = setInterval(() => {
+                i = (i + 1) % SPINNER_FRAMES.length;
+                spinner.textContent = SPINNER_FRAMES[i];
+            }, SPINNER_INTERVAL_MS);
+            return { line, interval };
+        }
+        
+        function stopSpinner(handle) {
+            if (!handle) return;
+            clearInterval(handle.interval);
+            setTimeout(() => {
+                handle.line.remove();
+                scrollToBottom();
+            }, 150);
+        }
+        
+        async function runIntro() {
+            // Line 1: pwd
+            let line = createPromptLine();
+            await typeInto(line.querySelector('.typed'), 'pwd');
+            await sleep(250);
+            printOutput('/home/seunghyun/Documents');
+            await sleep(300);
+            
+            // Line 2: cd portfolio
+            line = createPromptLine();
+            await typeInto(line.querySelector('.typed'), 'cd portfolio');
+            await sleep(200);
+            state.path = '~/portfolio';
+            
+            // Show new prompt reflecting new path
+            line = createPromptLine();
+            await sleep(150);
+            
+            // Line 3: npm run install (as teaser)
+            await typeInto(line.querySelector('.typed'), 'npm run start');
+            
+            // Show server starting line (authentic style)
+            printOutput('Starting the development server...');
+            
+            // Small pause after hitting Enter on npm command
+            await sleep(900);
+            
+            // Spinner animation (ASCII wheel)
+            const spinnerHandle = startSpinner('');
+            await sleep(SPINNER_DURATION_MS);
+            stopSpinner(spinnerHandle);
+            
+            // Hosted info (authentic style)
+            printOutput('  Local:   http://localhost:8000');
+            printOutput('  Press Ctrl+C to stop');
+            
+            await sleep(1500);
+            // Redirect to home teaser destination
+            window.location.replace(REDIRECT_TARGET);
+        }
+        
+        window.addEventListener('load', runIntro);
+    </script>
+</body>
+</html>

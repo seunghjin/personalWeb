@@ -1,0 +1,12 @@
+﻿{
+  "name": "personal-website",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "live-server --port=5173 --open=index.html --watch=.",
+    "start": "live-server --port=8080 --open=index.html --watch=."
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
