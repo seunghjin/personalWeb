@@ -36,12 +36,103 @@
 		.hero h1 { font-size: 32px; color: #e6edf3; margin-bottom: 8px; }
 		.badge { display: inline-block; background: #161b22; border: 1px solid #30363d; color: #c9d1d9; padding: 6px 10px; border-radius: 6px; margin-right: 8px; margin-bottom: 8px; }
 		.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+		.projects-grid { display: flex; flex-direction: column; gap: 24px; }
+		.project-card { max-width: 700px; }
+		.project-thumb { width: 120px; height: 80px; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; object-fit: cover; margin-bottom: 12px; }
+		.exp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+		.exp-card { display: grid; grid-template-columns: 56px 1fr; gap: 12px; align-items: start; }
+		.exp-card .logo { width: 56px; height: 56px; border-radius: 8px; background: #0d1117; border: 1px solid #30363d; object-fit: cover; }
 		.card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; }
 		.card h3 { color: #e6edf3; margin-bottom: 6px; font-size: 18px; }
-		.card p { color: #8b949e; font-size: 14px; }
+		.card p { color: #8b949e; font-size: 14px; margin-bottom: 8px; }
+		.card .meta { color: #8b949e; font-size: 14px; margin-bottom: 12px; }
+		.card .description { color: #8b949e; font-size: 14px; margin-bottom: 0; }
+		.card a { color: #79c0ff; text-decoration: underline; }
+		.card a:hover { color: #58a6ff; }
 		.btn { display: inline-block; margin-top: 10px; color: #79c0ff; text-decoration: none; border-bottom: 1px dotted #79c0ff; }
 		.btn:hover { color: #58a6ff; border-bottom-color: #58a6ff; }
 		.footer { padding: 24px; text-align: center; color: #8b949e; }
+		.typing { overflow: hidden; white-space: nowrap; }
+		.typing::after { content: '|'; animation: blink 1s infinite; }
+		.hidden { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+		.visible { opacity: 1; transform: translateY(0); }
+		.section-content { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+		.section-content.visible { opacity: 1; transform: translateY(0); }
+		/* Flip card styles for Work Experience */
+		.flip.card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; }
+		.flip { perspective: 1000px; cursor: pointer; }
+		.flip-inner { position: relative; transition: transform 0.6s; transform-style: preserve-3d; height: 100%; }
+		.flip.flipped .flip-inner { transform: rotateY(180deg); }
+		.flip-face { position: absolute; inset: 0; backface-visibility: hidden; }
+		.flip-front { display: flex; align-items: center; justify-content: center; color: #8b949e; }
+		.flip-back { transform: rotateY(180deg); }
+		/* Height will match back content dynamically */
+		.company-logo { width: auto; height: 60px; margin: 12px auto 0 auto; border-radius: 6px; background: #0d1117; border: 1px solid #30363d; object-fit: contain; display: block;}
+		.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #30363d;
+    transform: translateX(-50%);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+    width: 45%;
+}
+
+.timeline-item.left {
+    left: 0;
+	text-align: center;
+}
+
+.timeline-item.right {
+    left: 55%;
+	text-align: center;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;  /* Centers vertically */
+    transform: translateY(-50%);  /* Adjusts for dot's own height */
+    width: 12px;
+    height: 12px;
+    background: #58a6ff;
+    border-radius: 50%;
+    border: 2px solid #0d1117;
+}
+
+.timeline-item.left::before {
+    right: -25px;
+}
+
+.timeline-item.right::before {
+    left: -25px;
+}
+
+.pdf-viewer {
+	margin-top: 24px;
+	border: 1px solid #30363d;
+	border-radius: 8px;
+	overflow: hidden;
+	background: #161b22;
+}
+
+.pdf-viewer iframe {
+	border: none;
+	display: block;
+}
 	</style>
 </head>
 <body>
@@ -60,55 +151,125 @@
 	<main class="main">
 		<section class="container hero" id="hero" aria-labelledby="hero-title">
 			<h1 id="hero-title">Seung Hyun Jin — SWE + AI Engineer</h1>
-			<p class="muted">Building reliable systems and ML-enabled products. Focused on pragmatic engineering and clean UX.</p>
+			<p class="muted">Building reliable systems and ML-enabled products. Focused on pragmatic engineering and ambitious projects.</p>
 		</section>
 
 		<section class="container section" id="about" aria-labelledby="about-title">
-			<h2 id="about-title">About</h2>
-			<p class="muted">I'm a junior attending Duke University. Love to work with data, machine learning, and pushing products for others to use. I love to play basketball and gamble to get pokemon cards.</p>
+			<h2 id="about-title" class="typing" data-text="About">About</h2>
+			<div class="section-content" id="about-content">
+				<p class="muted">I'm a junior studying CS and Statistics at Duke University. Love to work with data, machine learning, and pushing products for others to use.
+					 In my freetime, I play basketball, lift weights, and explore food spots to gatekeep from my friends!</p>
+			</div>
 		</section>
 
-		<section class="container section" id="experience" aria-labelledby="exp-title">
-			<h2 id="exp-title">Work Experience</h2>
-			<div class="grid">
-				<div class="card">
-					<h3>Role @ Company</h3>
-					<p>YYYY–YYYY • City/Remote</p>
-					<p class="muted">One or two lines describing impact, tech stack, and outcomes.</p>
-				</div>
-				<div class="card">
-					<h3>Role @ Company</h3>
-					<p>YYYY–YYYY • City/Remote</p>
-					<p class="muted">One or two lines describing impact, tech stack, and outcomes.</p>
+		<section class="container section" id="experience" aria-labelledby="experience-title">
+			<h2 id="experience-title" class="typing" data-text="Work Experience">Work Experience</h2>
+			<div class="section-content" id="experience-content">
+				<div class="timeline">
+					<div class="timeline-item left">
+						<div class="card flip hidden" data-delay="0">
+							<div class="flip-inner">
+								<div class="flip-face flip-front">Click to flip!</div>
+								<div class="flip-face flip-back">
+									<h3>BioDevice Engineer @ <a href="https://www.zoetis.com" target="_blank" rel="noopener">Zoetis</a></h3>
+									<p class="meta">Durham, NC • Summer 2025</p>
+									<p class="description">Auotmated workflow and created AI assistant for technicians now supported 24/7 across all 7 continents.</p>
+									<img class="company-logo" src="../assets/images/zoetis-logo.png" alt="Zoetis logo" onerror="this.style.display='none'">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="timeline-item right">
+						<div class="card flip hidden" data-delay="1">
+							<div class="flip-inner">
+								<div class="flip-face flip-front">Click to flip!</div>
+								<div class="flip-face flip-back">
+									<h3>Software Engineer @ <a href="https://www.linkedin.com/company/lunch-bunch-llc/" target="_blank" rel="noopener">LunchBunch</a></h3>
+									<p class="meta">Durham, NC • 2023-Current</p>
+									<p class="description">Supported student-led startup to gain recognition from investors + microservice architecture deployment with CI/CD pipeline.</p>
+									<img class="company-logo" src="../assets/images/lunchbunch-logo.jpg" alt="LunchBunch logo" onerror="this.style.display='none'">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="timeline-item left">
+						<div class="card flip hidden" data-delay="2">
+							<div class="flip-inner">
+								<div class="flip-face flip-front">Click to flip!</div>
+								<div class="flip-face flip-back">
+									<h3>Research Assistant @ <a href="https://sites.google.com/view/john-w-hickey/" target="_blank" rel="noopener">HickeyLab</a></h3>
+									<p class="meta">Durham, NC • 2024-Current</p>
+									<p class="description">Data analysis and ML algorithm development for tissue research. Look at what we do! Further research!</p>
+									<img class="company-logo" src="../assets/images/hickeylab-logo.png" alt="HickeyLab logo" onerror="this.style.display='none'">
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>
 
 		<section class="container section" id="projects" aria-labelledby="projects-title">
-			<h2 id="projects-title">Projects</h2>
-			<div class="grid">
-				<div class="card">
-					<h3>Project Name</h3>
-					<p class="muted">Brief description of what it does and the tech used.</p>
-					<a class="btn" href="#" target="_blank" rel="noopener">View</a>
+			<h2 id="projects-title" class="typing" data-text="Projects">Projects</h2>
+			<div class="section-content" id="projects-content">
+				<div class="projects-grid">
+				<div class="project-card">
+					<img class="project-thumb" src="../assets/images/project-failure-analysis.jpg" alt="Mechanical Failure Analysis" onerror="this.style.display='none'">
+					<div class="card hidden" data-delay="0">
+						<h3>Mechanical Failure Analysis</h3>
+						<p><a href="https://biodevicechatsupport.netlify.app/" target="_blank" rel="noopener">Check it out!</a></p>
+						<ul style="color: #8b949e; font-size: 14px; margin: 12px 0; padding-left: 20px;">
+							<li>Developed ML pipeline using fine-tuned models and RAG to automate mechanical failure analysis, achieving 80% solution accuracy and 50% reduction in troubleshooting time</li>
+							<li>Implemented NLP system with PyTorch, Hugging Face, and FAISS vectors to process data and generate contextualized repair solutions through LoRA tuning</li>
+							<li>Deployed AI bot via Microsoft Teams integration and web app enabling real-time responses to failure queries</li>
+						</ul>
+					</div>
 				</div>
-				<div class="card">
-					<h3>Project Name</h3>
-					<p class="muted">Brief description of what it does and the tech used.</p>
-					<a class="btn" href="#" target="_blank" rel="noopener">View</a>
+				<div class="project-card">
+					<img class="project-thumb" src="../assets/images/project-tricen.jpg" alt="TriCen" onerror="this.style.display='none'">
+					<div class="card hidden" data-delay="1">
+						<h3>TriCen</h3>
+						<p><a href="#" target="_blank" rel="noopener">Check it out →</a></p>
+						<ul style="color: #8b949e; font-size: 14px; margin: 12px 0; padding-left: 20px;">
+							<li>Engineered mental health crisis intervention system preventing caller abandonment through AI conversation</li>
+							<li>Developed integration between Twilio API and LLM to deliver responsive, empathetic AI interactions</li>
+							<li>Implemented real-time speech-to-text transcription with optimized chunking to maintain natural conversation flow</li>
+							<li>Created operator dashboard displaying conversation summaries and transcripts for handoffs while preserving caller privacy</li>
+						</ul>
+					</div>
 				</div>
-				<div class="card">
-					<h3>Project Name</h3>
-					<p class="muted">Brief description of what it does and the tech used.</p>
-					<a class="btn" href="#" target="_blank" rel="noopener">View</a>
+				<div class="project-card">
+					<img class="project-thumb" src="../assets/images/project-htu.jpg" alt="Hierarchical Tissue Unit Annotation" onerror="this.style.display='none'">
+					<div class="card hidden" data-delay="2">
+						<h3>Hierarchical Tissue Unit Annotation</h3>
+						<p><a href="#" target="_blank" rel="noopener">Check it out →</a></p>
+						<ul style="color: #8b949e; font-size: 14px; margin: 12px 0; padding-left: 20px;">
+							<li>Used Unsupervised ML models for statistical analysis of cell neighborhoods in colon and intestinal tissues</li>
+							<li>Processed and segmented large-scale microscopic datasets using automated Python scripts</li>
+							<li>Designed and trained neural networks to process and identify spatial patterns across 1M+ pixels</li>
+						</ul>
+					</div>
+				</div>
 				</div>
 			</div>
 		</section>
 
 		<section class="container section" id="resume" aria-labelledby="resume-title">
-			<h2 id="resume-title">Resume</h2>
-			<p class="muted">Add your resume PDF to <code>assets/resume.pdf</code>. Link below will start working once the file is there.</p>
-			<p style="margin-top:8px;"><a class="btn" href="../assets/resume.pdf" target="_blank" rel="noopener">Download Resume (PDF)</a></p>
+			<h2 id="resume-title" class="typing" data-text="Resume">Resume</h2>
+			<div class="section-content" id="resume-content">
+				<p class="muted">View my resume below or download the PDF.</p>
+				<p style="margin: 16px 0;"><a class="btn" href="../assets/SeungHyunJin_resume_Aug4.pdf" target="_blank" rel="noopener">Download Resume (PDF)</a></p>
+				
+				<div class="pdf-viewer">
+					<iframe 
+						src="../assets/SeungHyunJin_resume_Aug4.pdf" 
+						width="100%" 
+						height="600px"
+						type="application/pdf">
+						<p>Your browser doesn't support PDF viewing. <a href="../assets/SeungHyunJin_resume_Aug4.pdf" target="_blank">Download the PDF</a> instead.</p>
+					</iframe>
+				</div>
+			</div>
 		</section>
 	</main>
 
@@ -118,6 +279,104 @@
 		</div>
 	</footer>
 
+	<script>
+		const sections = ['about', 'experience', 'projects', 'resume'];
+		const animatedSections = new Set();
+		const TYPE_DELAY = 80;
+		
+		function sleep(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
+		}
+		
+		async function typeText(element, text) {
+			element.textContent = '';
+			element.classList.add('typing');
+			
+			for (let i = 0; i < text.length; i++) {
+				element.textContent += text[i];
+				await sleep(TYPE_DELAY);
+			}
+			
+			element.classList.remove('typing');
+		}
+		
+		async function animateSection(sectionId) {
+			if (animatedSections.has(sectionId)) return;
+			animatedSections.add(sectionId);
+			
+			const titleElement = document.getElementById(`${sectionId}-title`);
+			const contentElement = document.getElementById(`${sectionId}-content`);
+			const text = titleElement.getAttribute('data-text');
+			
+			// Type the title
+			await typeText(titleElement, text);
+			
+			// Show content
+			contentElement.classList.add('visible');
+			
+			// Animate cards sequentially
+			const cards = Array.from(contentElement.querySelectorAll('.card'));
+			for (let i = 0; i < cards.length; i++) {
+				if (i > 0) await sleep(300);
+				cards[i].classList.remove('hidden');
+				cards[i].classList.add('visible');
+			}
+		}
+		
+		function isInViewport(element) {
+			const rect = element.getBoundingClientRect();
+			return rect.top <= window.innerHeight * 0.8 && rect.bottom >= 0;
+		}
+		
+		function handleScroll() {
+			sections.forEach(sectionId => {
+				const section = document.getElementById(sectionId);
+				if (isInViewport(section)) {
+					animateSection(sectionId);
+				}
+			});
+		}
+		
+		// Initialize
+		window.addEventListener('load', () => {
+			// Start with About section
+			setTimeout(() => animateSection('about'), 500);
+		});
+		
+		window.addEventListener('scroll', handleScroll);
+		handleScroll(); // Check on load
+
+		// Flip handlers for Work Experience
+		document.addEventListener('click', (e) => {
+			const flip = e.target.closest('.flip');
+			if (!flip) return;
+			flip.classList.toggle('flipped');
+			sizeFlipCards();
+		});
+
+		// Ensure flip cards keep consistent height matching back content
+		function sizeFlipCards(scope = document) {
+			const flips = scope.querySelectorAll('.flip');
+			flips.forEach(flip => {
+				const back = flip.querySelector('.flip-back');
+				if (back) {
+					const flipCS = getComputedStyle(flip);
+					const padV = (parseFloat(flipCS.paddingTop) || 0) + (parseFloat(flipCS.paddingBottom) || 0);
+					const borderV = (parseFloat(flipCS.borderTopWidth) || 0) + (parseFloat(flipCS.borderBottomWidth) || 0);
+					flip.style.height = (back.scrollHeight + padV + borderV) + 'px';
+				}
+			});
+		}
+		window.addEventListener('resize', () => sizeFlipCards());
+		sizeFlipCards();
+
+		// Recompute sizes after sections reveal
+		const _origAnimateSection = animateSection;
+		animateSection = async function(sectionId) {
+			await _origAnimateSection(sectionId);
+			if (sectionId === 'experience') sizeFlipCards(document.getElementById('experience-content'));
+		};
+	</script>
 </body>
 </html>
 
